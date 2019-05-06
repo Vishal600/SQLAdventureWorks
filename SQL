@@ -1,0 +1,56 @@
+/*https://sqlzoo.net/wiki/AdventureWorks_easy_questions*/
+/* Easy Questions */
+
+/* Question 1 */
+SELECT FirstName, EmailAddress
+ FROM Customer
+WHERE CompanyName='Bike World'
+
+/* Question 2 */
+SELECT CompanyName
+ FROM Customer
+JOIN CustomerAddress 
+ ON Customer.CustomerID=CustomerAddress.CustomerID
+JOIN Address
+ ON CustomerAddress.AddressID=Address.AddressID
+WHERE City='Dallas'
+
+
+/* Question 3 */
+SELECT COUNT(*)ListPrice
+FROM
+  Product
+WHERE ListPrice > 1000
+
+
+/* Question 4 */
+SELECT
+  CompanyName
+FROM
+ Customer
+  JOIN
+   SalesOrderHeader
+    ON SalesOrderHeader.CustomerID = Customer.CustomerID
+WHERE
+  SalesOrderHeader.SubTotal + SalesOrderHeader.TaxAmt + SalesOrderHeader.Freight > 100000;
+  
+
+
+
+/* Question 5 */
+  SELECT OrderQty As Total
+FROM
+  SalesOrderDetail
+  JOIN
+    Product
+    ON SalesOrderDetail.ProductID = Product.ProductID
+  JOIN
+    SalesOrderHeader
+    ON SalesOrderDetail.SalesOrderID =SalesOrderHeader.SalesOrderID
+  JOIN
+    Customer
+    ON SalesOrderHeader.CustomerID = Customer.CustomerID
+WHERE
+  Product.Name = 'Racing Socks, L'
+  AND Customer.CompanyName = 'Riding Cycles'
+
