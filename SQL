@@ -53,4 +53,97 @@ FROM
 WHERE
   Product.Name = 'Racing Socks, L'
   AND Customer.CompanyName = 'Riding Cycles'
+  
+  /* Question 6 */
+
+SELECT
+ SalesOrderID,
+ UnitPrice
+FROM SalesOrderDetail
+WHERE
+ OrderQty = 1
+
+
+ /* Question 7 */
+ 
+ SELECT
+  Product.name, Customer.CompanyName
+FROM
+  ProductModel
+JOIN
+  Product
+  ON ProductModel.ProductModelID = Product.ProductModelID
+JOIN
+  SalesOrderDetail
+  ON SalesOrderDetail.ProductID = Product.ProductID
+JOIN
+ SalesOrderHeader
+ ON SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesOrderID
+JOIN
+ Customer
+ ON SalesOrderHeader.CustomerID = Customer.CustomerID
+WHERE
+  ProductModel.Name = 'Racing Socks';
+
+
+ /* Question 8 */
+ 
+ SELECT ProductDescription.Description
+ FROM ProductDescription
+   JOIN
+     ProductModelProductDescription
+   ON
+ ProductDescription.ProductDescriptionID=ProductModelProductDescription.ProductDescriptionID
+ JOIN
+    ProductModel
+    ON ProductModelProductDescription.ProductModelID = ProductModel.ProductModelID
+  JOIN
+    Product
+    ON ProductModel.ProductModelID = Product.ProductModelID
+WHERE ProductID=736 
+AND
+   Culture='fr'
+   
+ /* Question 9 */
+   SELECT
+  Customer.CompanyName,
+  SalesOrderHeader.SubTotal,
+  Product.weight
+FROM
+  Product
+  JOIN
+    SalesOrderDetail
+    ON Product.ProductID = SalesOrderDetail.ProductID
+  JOIN
+    SalesOrderHeader
+    ON SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesorderID
+  JOIN
+    Customer
+    ON SalesOrderHeader.CustomerID = Customer.CustomerID
+ORDER BY
+  SalesOrderHeader.SubTotal DESC;
+ 
+ /*Question 10 */
+ SELECT
+  SUM(OrderQty)
+FROM
+  ProductCategory
+  JOIN
+    Product
+    ON ProductCategory.ProductCategoryID = Product.ProductCategoryID
+JOIN
+    SalesOrderDetail
+    ON Product.ProductID = SalesOrderDetail.ProductID
+ JOIN
+    SalesOrderHeader
+    ON SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesorderID
+ JOIN
+    Address
+    ON SalesOrderHeader.ShipToAddressID = Address.AddressID
+WHERE
+  Address.City='London'
+  AND ProductCategory.Name='Cranksets'
+
+
+
 
