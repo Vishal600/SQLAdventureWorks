@@ -144,6 +144,114 @@ WHERE
   Address.City='London'
   AND ProductCategory.Name='Cranksets'
 
+/*Question 11 */
 
+SELECT
+ Customer.CompanyName,
+ MAX(CASE WHEN AddressType = 'Main Office' THEN AddressLine1 ELSE '' END) ,
+ MAX(CASE WHEN AddressType = 'Shipping' THEN AddressLine1 ELSE '' END) 
+  FROM
+  Customer
+  JOIN
+    CustomerAddress
+    ON Customer.CustomerID = CustomerAddress.CustomerID
+  JOIN
+    Address
+    ON CustomerAddress.AddressID = Address.AddressID
+   WHERE
+    Address.City = 'Dallas'
+  GROUP BY
+  Customer.CompanyName;
+  
+  /*Question 12 */
+  SELECT
+  SalesOrderHeader.SalesOrderID,
+  SalesOrderHeader.SubTotal,
+  SUM(SalesOrderDetail.OrderQty * SalesOrderDetail.UnitPrice),
+  SUM(SalesOrderDetail.OrderQty * Product.ListPrice)
+FROM
+  SalesOrderHeader
+  JOIN
+    SalesOrderDetail
+    ON SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
+  JOIN
+    Product
+    ON SalesOrderDetail.ProductID = Product.ProductID
+GROUP BY
+  SalesOrderHeader.SalesOrderID,
+  SalesOrderHeader.SubTotal;
+  
+  /*QUESTION 13 */
+  SELECT
+  Product.Name,
+  SUM(SalesOrderDetail.OrderQty * SalesOrderDetail.UnitPrice) AS TotalValue
+FROM
+  Product
+  JOIN
+    SalesOrderDetail
+    ON Product.ProductID = SalesOrderDetail.ProductID
+GROUP BY
+  Product.Name
+ORDER BY
+  TotalValue DESC;
+  
+  /* Question 14 */
+  SELECT
+  t.range AS 'RANGE',
+  COUNT(Total) AS 'Number of Orders',
+  SUM(Total) AS 'Total Value'
+FROM
+  (
+    SELECT
+    CASE
+      WHEN
+        SalesOrderDetail.UnitPrice * SalesOrderDetail.OrderQty BETWEEN 0 AND 99
+      THEN
+        '0-99'
+      WHEN
+        SalesOrderDetail.UnitPrice * SalesOrderDetail.OrderQty BETWEEN 100 AND 999
+      THEN
+        '100-999'
+      WHEN
+        SalesOrderDetail.UnitPrice * SalesOrderDetail.OrderQty BETWEEN 1000 AND 9999
+      THEN
+        '1000-9999'
+      WHEN
+        SalesOrderDetail.UnitPrice * SalesOrderDetail.OrderQty > 10000
+      THEN
+        '10000-'
+      ELSE
+        'Error'
+    END AS 'Range',
+    SalesOrderDetail.UnitPrice * SalesOrderDetail.OrderQty AS Total
+  FROM
+    SalesOrderDetail
+  ) t
+GROUP BY
+  t.range;
+  
+  /* Question 15 */
+  SELECT
+  Address.City,
+  ProductCategory.Name AS Product_Category_Name,
+  SUM(SalesOrderDetail.OrderQty * SalesOrderDetail.UnitPrice) AS Total_Sales
+FROM
+  Address
+  JOIN
+    SalesOrderHeader
+    ON Address.AddressID = SalesOrderHeader.ShipToAddressID
+  JOIN
+    SalesOrderDetail
+    ON SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
+  JOIN
+    Product
+    ON SalesOrderDetail.ProductID = Product.ProductID
+  JOIN
+    ProductCategory
+    ON Product.ProductCategoryID = ProductCategory.ProductCategoryID
+
+GROUP BY
+  Address.City,
+  ProductCategory.Name;
 
 
